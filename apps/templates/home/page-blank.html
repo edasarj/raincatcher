@@ -1,0 +1,196 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Page Blank {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+
+	<style>
+#mySidenav a {
+  position: absolute;
+  left: -80px;
+  transition: 0.3s;
+  padding: 15px;
+  width: 100px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+}
+
+#mySidenav a:hover {
+  left: 0;
+}
+#logo {
+  top: 80px;
+  background-color: #ac7c54;
+  opacity: 0.2;
+}
+#about {
+  top: 20px;
+  background-color: #0c74bc;
+  opacity: 0.2;
+}
+
+#blog {
+  top: 80px;
+  background-color: #ac7c54;
+  opacity: 0.2;
+}
+
+
+#projects {
+  top: 140px;
+  background-color: #046c3c;
+  opacity: 0.2;
+}
+
+#contact {
+  top: 200px;
+  background-color: #88748c;
+  opacity: 0.2;
+}
+  
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Flow Map</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Flow Map</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Flow Map</h5>
+                                        </div>
+                                        <div class="card-block" id="map"style="width: 75vw; height: 100vh">
+                                            <!--div id="map" style="width: 50vw; height: 50vh"></div-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://unpkg.com/deck.gl@^8.5.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.5.0/dist.min.js"></script>
+
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+<script type="text/javascript">
+    const LOOP_LENGTH = 1800;
+    const ANIMATION_SPEED = 0.4;
+
+    async function initialize() {
+      deck.carto.setDefaultCredentials({
+        username: 'public',
+        apiKey: 'default_public',
+      });
+
+      // Fetch Data from CARTO
+ //     const query = 'SELECT the_geom, vendor, timestamps FROM new_york_trips';
+ //     const url = `https://public.carto.com/api/v2/sql?q=${query}&format=geojson`;
+ //     const geojsonData = await fetch(url).then(response => response.json());
+//        const geojsonData = {
+// "type": "FeatureCollection", "features": [{'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455031, 22.576458], [88.455184, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [1191,1193.803]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455184, 22.576467], [88.455342, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455342, 22.576467], [88.455461, 22.576458]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455461, 22.576458], [88.45562, 22.576445]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45562, 22.576445], [88.455745, 22.576437]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455745, 22.576437], [88.455898, 22.576445]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455898, 22.576445], [88.456034, 22.576444]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456034, 22.576444], [88.456213, 22.576438]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456213, 22.576438], [88.456373, 22.576427]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456373, 22.576427], [88.456552, 22.576419]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456552, 22.576419], [88.45655, 22.576481]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45655, 22.576481], [88.456562, 22.576592]]]}, 'properties': {'vendor': 0, 'timestamps': [1482206922760.0, 1482206922770.0]}}
+// "type": "FeatureCollection", "features": [{'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455031, 22.576458], [88.455184, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [54.47802734375, 1054.47802734375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455184, 22.576467], [88.455342, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455342, 22.576467], [88.455461, 22.576458]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455461, 22.576458], [88.45562, 22.576445]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45562, 22.576445], [88.455745, 22.576437]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455745, 22.576437], [88.455898, 22.576445]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455898, 22.576445], [88.456034, 22.576444]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456034, 22.576444], [88.456213, 22.576438]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456213, 22.576438], [88.456373, 22.576427]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456373, 22.576427], [88.456552, 22.576419]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456552, 22.576419], [88.45655, 22.576481]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45655, 22.576481], [88.456562, 22.576592]]]}, 'properties': {'vendor': 0, 'timestamps': [55.43896484375, 1055.43896484375]}}	
+	
+//	]}
+//const geojsonData={"type": "FeatureCollection", "features": [{'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455031, 22.576458], [88.455184, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [125.682861328125, 225.68310546875]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455184, 22.576467], [88.455342, 22.576467]]]}, 'properties': {'vendor': 0, 'timestamps': [236.35888671875, 336.359130859375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455342, 22.576467], [88.455461, 22.576458]]]}, 'properties': {'vendor': 0, 'timestamps': [346.987060546875, 446.98681640625]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455461, 22.576458], [88.45562, 22.576445]]]}, 'properties': {'vendor': 2, 'timestamps': [457.48681640625, 757.48681640625]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45562, 22.576445], [88.455745, 22.576437]]]}, 'properties': {'vendor': 2, 'timestamps': [568.19287109375, 868.19287109375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455745, 22.576437], [88.455898, 22.576445]]]}, 'properties': {'vendor': 1, 'timestamps': [678.93798828125, 878.93798828125]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.455898, 22.576445], [88.456034, 22.576444]]]}, 'properties': {'vendor': 1, 'timestamps': [789.39990234375, 989.39990234375]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456034, 22.576444], [88.456213, 22.576438]]]}, 'properties': {'vendor': 1, 'timestamps': [899.634765625, 1099.635009765625]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456213, 22.576438], [88.456373, 22.576427]]]}, 'properties': {'vendor': 2, 'timestamps': [1010.1259765625, 1310.125732421875]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456373, 22.576427], [88.456552, 22.576419]]]}, 'properties': {'vendor': 1, 'timestamps': [1120.9140625, 1320.9140625]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.456552, 22.576419], [88.45655, 22.576481]]]}, 'properties': {'vendor': 1, 'timestamps': [1231.446044921875, 1431.44580078125]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.45655, 22.576481], [88.456562, 22.576592]]]}, 'properties': {'vendor': 1, 'timestamps': [1341.660888671875, 1541.6611328125]}}]}
+const geojsonData={"type": "FeatureCollection", "features": [{'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.504871, 22.556859], [88.50493, 22.556998]]]}, 'properties': {'vendor': 0, 'timestamps': [0.0, 100.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.50493, 22.556998], [88.5057, 22.556758]]]}, 'properties': {'vendor': 0, 'timestamps': [10.0, 110.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.5057, 22.556758], [88.50645, 22.556791]]]}, 'properties': {'vendor': 0, 'timestamps': [20.0, 120.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.50645, 22.556791], [88.506376, 22.55658]]]}, 'properties': {'vendor': 0, 'timestamps': [30.0, 130.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.506376, 22.55658], [88.506536, 22.557376]]]}, 'properties': {'vendor': 0, 'timestamps': [40.0, 140.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.506536, 22.557376], [88.506756, 22.557931]]]}, 'properties': {'vendor': 0, 'timestamps': [50.0, 150.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.506756, 22.557931], [88.506944, 22.558422]]]}, 'properties': {'vendor': 0, 'timestamps': [60.0, 160.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.506944, 22.558422], [88.507, 22.558541]]]}, 'properties': {'vendor': 0, 'timestamps': [70.0, 170.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.507, 22.558541], [88.50567, 22.558813]]]}, 'properties': {'vendor': 0, 'timestamps': [80.0, 180.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.50567, 22.558813], [88.506096, 22.558808]]]}, 'properties': {'vendor': 0, 'timestamps': [90.0, 190.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.506096, 22.558808], [88.508118, 22.559027]]]}, 'properties': {'vendor': 0, 'timestamps': [100.0, 200.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.508118, 22.559027], [88.508646, 22.559386]]]}, 'properties': {'vendor': 0, 'timestamps': [110.0, 210.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.508646, 22.559386], [88.50878, 22.559725]]]}, 'properties': {'vendor': 0, 'timestamps': [120.0, 220.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.50878, 22.559725], [88.507251, 22.560235]]]}, 'properties': {'vendor': 0, 'timestamps': [130.0, 230.0]}}, {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': [[[88.507251, 22.560235], [88.506999, 22.559849]]]}, 'properties': {'vendor': 0, 'timestamps': [140.0, 240.0]}}]}
+ 
+ // TripsLayer needs data in the following format
+      const layerData = geojsonData.features.map(f => ({
+        vendor: f.properties.vendor,
+        timestamps: f.properties.timestamps,
+        path: f.geometry.coordinates[0]
+      }));
+
+      const deckgl = new deck.DeckGL({
+        container: 'map',
+        mapStyle: deck.carto.BASEMAP.DARK_MATTER,
+        initialViewState: {
+          //longitude: -74,
+          longitude: 88.504871,
+          //latitude: 40.81,
+          latitude: 22.556859,
+          zoom: 20,
+          pitch: 45,
+          bearing: 0
+        },
+        controller: true
+      });
+
+      let time = 0;
+
+      function animate() {
+        time = (time + ANIMATION_SPEED) % LOOP_LENGTH;
+        window.requestAnimationFrame(animate);
+      }
+
+      setInterval(() => {
+        deckgl.setProps({
+          layers: [
+            new deck.TripsLayer({
+              id: 'trips-layer',
+              data: layerData,
+              getPath: d => d.path,
+              getTimestamps: d => d.timestamps,
+              //getColor: d => (d.vendor === 0 ? [253, 128, 93] : [23, 184, 190]),
+			  getColor: d => (d.vendor === 0 ? [0, 0, 255] : d.vendor === 1 ?[0, 0, 255]:d.vendor === 2?[0, 0, 255]:[0,0,0]),
+              opacity: 0.3,
+              widthMinPixels: 2,
+              rounded: true,
+              trailLength: 180,
+              currentTime: time,
+              shadowEnabled: false
+            })
+          ]
+        });
+      }, 50);
+
+      window.requestAnimationFrame(animate);
+    }
+
+    initialize();    
+  </script>
+
+
+
+{% endblock javascripts %}

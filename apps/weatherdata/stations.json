@@ -1,0 +1,272 @@
+[
+    {
+        "station": "Shivajinagar",
+        "jurisdiction": "Pune",
+        "region": "Maharashtra",
+        "stationId": 43063
+    },
+    {
+        "station": "Santacruz",
+        "jurisdiction": "Mumbai",
+        "region": "Maharashtra",
+        "stationId": 43003
+    },
+    {
+        "station": "Colaba",
+        "jurisdiction": "Mumbai",
+        "region": "Maharashtra",
+        "stationId": 43057
+    },
+    {
+        "station": "Colaba",
+        "jurisdiction": "Mumbai",
+        "region": "Maharashtra",
+        "stationId": 43057
+    },
+    {
+        "station": "Hyderabad",
+        "jurisdiction": "Hyderabad",
+        "region": "Telangana",
+        "stationId": 43128
+    },
+    {
+        "station": "Bengaluru",
+        "jurisdiction": "Bengaluru",
+        "region": "Karnataka",
+        "stationId": 43295
+    },
+    {
+        "station": "Minambakkam",
+        "jurisdiction": "Chennai",
+        "region": "Tamil Nadu",
+        "stationId": 43279
+    },
+    {
+        "station": "Nungambakkam",
+        "jurisdiction": "Chennai",
+        "region": "Tamil Nadu",
+        "stationId": 43279
+    },
+    {
+        "station": "Visakhapatnam",
+        "jurisdiction": "Visakhapatnam",
+        "region": "Andhra Pradesh",
+        "stationId": 43149
+    },
+    {
+        "station": "Thiruvananthapuram",
+        "jurisdiction": "Thiruvananthapuram",
+        "region": "Kerala",
+        "stationId": 43371
+    },
+    {
+        "station": "Bhubaneswar",
+        "jurisdiction": "Bhubaneswar",
+        "region": "Odisha",
+        "stationId": 42971
+    },
+    {
+        "station": "Gopalpur",
+        "jurisdiction": "Gopalpur",
+        "region": "Odisha",
+        "stationId": 43049
+    },
+    {
+        "station": "Puducherry",
+        "jurisdiction": "Puducherry",
+        "region": "Puducherry",
+        "stationId": 43328
+    },
+    {
+        "station": "Lalpur",
+        "jurisdiction": "Raipur",
+        "region": "Chhattisgarh",
+        "stationId": 42874
+    },
+    {
+        "station": "Arera",
+        "jurisdiction": "Bhopal",
+        "region": "Madhya Pradesh",
+        "stationId": 42667
+    },
+    {
+        "station": "Ahmedabad",
+        "jurisdiction": "Ahmedabad",
+        "region": "Gujarat",
+        "stationId": 42647
+    },
+    {
+        "station": "Indian Institute of Public Health",
+        "jurisdiction": "Gandhinagar",
+        "region": "Gujarat",
+        "stationId": 99959
+    },
+    {
+        "station": "Babasaheb Ambedkar International Airport",
+        "jurisdiction": "Nagpur",
+        "region": "Maharashtra",
+        "stationId": 42867
+    },
+    {
+        "station": "Birsa Munda Airport",
+        "jurisdiction": "Ranchi",
+        "region": "Jharkhand",
+        "stationId": 42701
+    },
+    {
+        "station": "Jaipur International Airport",
+        "jurisdiction": "Jaipur",
+        "region": "Rajasthan",
+        "stationId": 42348
+    },
+    {
+        "station": "Chaudhary Charan Singh International Airport",
+        "jurisdiction": "Lucknow",
+        "region": "Uttar Pradesh",
+        "stationId": 42369
+    },
+    {
+        "station": "Agra Airport",
+        "jurisdiction": "Agra",
+        "region": "Uttar Pradesh",
+        "stationId": 42260
+    },
+    {
+        "station": "Jay Prakash Narayan Airport",
+        "jurisdiction": "Patna",
+        "region": "Bihar",
+        "stationId": 42492
+    },
+    {
+        "station": "Netaji Subhas Chandra Bose International Airport",
+        "jurisdiction": "Kolkata",
+        "region": "West Bengal",
+        "stationId": 42809
+    },
+    {
+        "station": "Safdarjung Airport",
+        "jurisdiction": "New Delhi",
+        "region": "Delhi",
+        "stationId": 42182
+    },
+    {
+        "station": "Indira Gandhi International Airport",
+        "jurisdiction": "New Delhi",
+        "region": "Delhi",
+        "stationId": 42181
+    },
+    {
+        "station": "Gurugram",
+        "jurisdiction": "Gurugram",
+        "region": "Haryana",
+        "stationId": 42178
+    },
+    {
+        "station": "Rohtak",
+        "jurisdiction": "Rohtak",
+        "region": "Haryana",
+        "stationId": 42176
+    },
+    {
+        "station": "Chandigarh",
+        "jurisdiction": "Chandigarh",
+        "region": "Chandigarh",
+        "stationId": 42105
+    },
+    {
+        "station": "Ludhiana",
+        "jurisdiction": "Ludhiana",
+        "region": "Punjab",
+        "stationId": 42099
+    },
+    {
+        "station": "Sri Guru Ram Dass Jee International Airport",
+        "jurisdiction": "Amritsar",
+        "region": "Punjab",
+        "stationId": 42071
+    },
+    {
+        "station": "Jammu",
+        "jurisdiction": "Jammu",
+        "region": "Jammu and Kashmir",
+        "stationId": 42056
+    },
+    {
+        "station": "Srinagar",
+        "jurisdiction": "Srinagar",
+        "region": "Jammu and Kashmir",
+        "stationId": 42027
+    },
+    {
+        "station": "Leh",
+        "jurisdiction": "Leh",
+        "region": "Ladakh",
+        "stationId": 42034
+    },
+    {
+        "station": "Dharamshala",
+        "jurisdiction": "Dharamshala",
+        "region": "Himachal Pradesh",
+        "stationId": 42062
+    },
+    {
+        "station": "Mokhampur",
+        "jurisdiction": "Dehradun",
+        "region": "Uttarakhand",
+        "stationId": 42111
+    },
+    {
+        "station": "Darjeeling",
+        "jurisdiction": "Darjeeling",
+        "region": "West Bengal",
+        "stationId": 42293
+    },
+    {
+        "station": "Gangtok",
+        "jurisdiction": "Gangtok",
+        "region": "Sikkim",
+        "stationId": 42299
+    },
+    {
+        "station": "Guwahati",
+        "jurisdiction": "Guwahati",
+        "region": "Assam",
+        "stationId": 42410
+    },
+    {
+        "station": "Itanagar",
+        "jurisdiction": "Itanagar",
+        "region": "Arunachal Pradesh",
+        "stationId": 42308
+    },
+    {
+        "station": "Kohima",
+        "jurisdiction": "Kohima",
+        "region": "Nagaland",
+        "stationId": 42527
+    },
+    {
+        "station": "Imphal Airport",
+        "jurisdiction": "Imphal",
+        "region": "Manipur",
+        "stationId": 42623
+    },
+    {
+        "station": "Lengpui Airport",
+        "jurisdiction": "Aizawl",
+        "region": "Mizoram",
+        "stationId": 42727
+    },
+    {
+        "station": "Agartala",
+        "jurisdiction": "Agartala",
+        "region": "Tripura",
+        "stationId": 42724
+    },
+    {
+        "station": "Shillong",
+        "jurisdiction": "Shillong",
+        "region": "Meghalaya",
+        "stationId": 42516
+    }
+]
