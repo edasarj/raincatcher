@@ -11,11 +11,26 @@ from django.urls import reverse
 import requests
 from bs4 import BeautifulSoup
 import json
+import folium
+import branca
+from folium import plugins
+from scipy.interpolate import griddata
+import geojsoncontour
+import scipy as sp
+import scipy.ndimage
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import mysql.connector as sql
+from folium.plugins import TimestampedGeoJson
+
 
 @login_required(login_url="/login/")
 def index(request):
     response=get_station_data(42809)
     tide=get_tide_data()
+    m2=waterloggingmap()
+    m=animemap()
     context = {'segment': 'index','tmax':(((json.dumps((response['forecast'][0]['max']), indent = 4)))),
                'tmin':(((json.dumps((response['forecast'][0]['min']), indent = 4)))),
                'forecast':(((json.dumps((response['forecast'][0]['condition']), indent = 4)))),
@@ -40,7 +55,9 @@ def index(request):
                'hightidenight':(((json.dumps((tide['tidaldata']['nighthightide']), indent = 4)))),
                'hightidenightheight':(((json.dumps((tide['tidaldata']['nighthightideheight']), indent = 4)))),
                'lowtidenight':(((json.dumps((tide['tidaldata']['nightlowtide']), indent = 4)))),
-               'lowtidenightheight':(((json.dumps((tide['tidaldata']['nightlowtideheight']), indent = 4))))
+               'lowtidenightheight':(((json.dumps((tide['tidaldata']['nightlowtideheight']), indent = 4)))),
+               'map': m,
+               'map2':m2
 
                }
     html_template = loader.get_template('home/index.html')
@@ -234,4 +251,128 @@ def get_tide_data():
             'nightlowtideheight': min_tide_night_height,
         }
     }
+def waterloggingmap():
+            # Read the digital elevation  model in longitude, latitude and elevation format.
+            ##DEM = pd.read_csv('boundary.csv', header = None, names = ['longitude','latitude','elevation'])# Set all negative elevations to zero to show that they will be under the mean sea level of zero
+            DEM=mysqlconnectn()
+            DEM.columns = ['longitude','latitude','elevation']
+            DEM.drop(DEM.head(1).index, inplace=True)# delete the first row that contain labels 'x,y,z'
+            DEM = DEM.replace(',','.', regex=True).astype(float) # set data type to float, they were saved as strings
+            vmin = DEM['elevation'].min() 
+            vmax = DEM['elevation'].max()# Setup colormap
+            colors = ['blue','royalblue', 'navy','pink',  'mediumpurple',  'darkorchid',  'plum',  'm', 'mediumvioletred', 'palevioletred', 'crimson',
+                     'magenta','pink','red','yellow','orange', 'brown','green', 'darkgreen']
+            levels = len(colors)
+            cm     = branca.colormap.LinearColormap(colors, vmin=vmin, vmax=vmax).to_step(levels)# Convertion from dataframe to array
+            x = np.asarray(DEM.longitude.tolist())
+            y = np.asarray(DEM.latitude.tolist())
+            z = np.asarray(DEM.elevation.tolist()) # Make a grid
+            x_arr          = np.linspace(np.min(x), np.max(x), 500)
+            y_arr          = np.linspace(np.min(y), np.max(y), 500)
+            x_mesh, y_mesh = np.meshgrid(x_arr, y_arr)
+             
+            # Grid the elevation (Edited on March 30th, 2020)
+            z_mesh = griddata((x, y), z, (x_mesh, y_mesh), method='linear')
+             
+            # Use Gaussian filter to smoothen the contour
+            sigma = [5, 5]
+            z_mesh = sp.ndimage.filters.gaussian_filter(z_mesh, sigma, mode='constant')
+             
+            # Create the contour
+            contourf = plt.contourf(x_mesh, y_mesh, z_mesh, levels, alpha=0.5, colors=colors, linestyles='None', vmin=vmin, vmax=vmax)
+
+
+            # Convert matplotlib contourf to geojson
+            geojson = geojsoncontour.contourf_to_geojson(
+                contourf=contourf,
+                min_angle_deg=3.0,
+                ndigits=5,
+                stroke_width=1,
+                fill_opacity=0.1)
+            # Set up the map placeholdder
+            geomap1 = folium.Map([DEM.latitude.mean(), DEM.longitude.mean()], zoom_start=12, tiles="OpenStreetMap")
+            folium.GeoJson(
+                geojson,
+                style_function=lambda x: {
+                    'color':     x['properties']['stroke'],
+                    'weight':    x['properties']['stroke-width'],
+                    'fillColor': x['properties']['fill'],
+                    'opacity':   0.5,
+                }).add_to(geomap1)
+             
+            # Add the colormap to the folium map for legend
+            cm.caption = 'waterlogging'
+            geomap1.add_child(cm)
+             
+            # Add the legend to the map
+            plugins.Fullscreen(position='bottomleft', force_separate_button=True).add_to(geomap1)
+            #geomap1.save('prediction.html')
+
+            m = geomap1._repr_html_()
+            ##context = {'map': m}
+            return m
+            ##return render(request, 'app_name/rainfall_map.html', context)
+
+def mysqlconnectn():
+    db_connection = sql.connect(host='localhost', database='water', user='root', password='')
+    db_cursor = db_connection.cursor()
+    db_cursor.execute('SELECT * FROM boundary')
+
+    table_rows = db_cursor.fetchall()
+
+    df = pd.DataFrame(table_rows)
+    return df
+def animemap():
+        # create a map with Folium
+        m = folium.Map(location=[37.7749, -122.4194], zoom_start=13)
+
+        # create some geoJSON data with timestamps
+        geojson_data = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-122.4194, 37.7749],
+                    },
+                    'properties': {
+                        'title': 'San Francisco',
+                        'time': '2023-03-18T12:00:00',
+                    },
+                },
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-122.4167, 37.7833],
+                    },
+                    'properties': {
+                        'title': 'Fisherman\'s Wharf',
+                        'time': '2023-03-18T13:00:00',
+                    },
+                },
+            ],
+        }
+
+        # create the TimestampedGeoJson layer
+        timestamped_geojson = TimestampedGeoJson(
+            data=geojson_data,
+            period='PT1H',
+            duration='PT1H',
+            auto_play=True,
+            loop=True,
+            max_speed=1,
+            loop_button=True,
+            date_options='YYYY-MM-DDTHH:MM:SSZ',
+            time_slider_drag_update=True,
+        )
+
+        # add the TimestampedGeoJson layer to the map
+        timestamped_geojson.add_to(m)
+        tm=m._repr_html_()
+
+        # render the map
+        
+        return tm
 
