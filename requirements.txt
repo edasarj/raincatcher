@@ -13,3 +13,6 @@ django-allauth==0.51.0
 django-sslserver
 beautifulsoup4==4.11.2
 folium==0.14.0
+scipy==1.9.3
+geojsoncontour==0.4.0
+matplotlib==3.6.1
