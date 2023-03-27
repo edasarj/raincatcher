@@ -21,7 +21,7 @@ import scipy.ndimage
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import mysql.connector as sql
+##import mysql.connector as sql
 from folium.plugins import TimestampedGeoJson
 
 
@@ -313,15 +313,15 @@ def waterloggingmap():
             return m
             ##return render(request, 'app_name/rainfall_map.html', context)
 
-def mysqlconnectn():
-    db_connection = sql.connect(host='localhost', database='water', user='root', password='')
-    db_cursor = db_connection.cursor()
-    db_cursor.execute('SELECT * FROM boundary')
+##def mysqlconnectn():
+##    db_connection = sql.connect(host='localhost', database='water', user='root', password='')
+##    db_cursor = db_connection.cursor()
+##    db_cursor.execute('SELECT * FROM boundary')
 
-    table_rows = db_cursor.fetchall()
+##    table_rows = db_cursor.fetchall()
 
-    df = pd.DataFrame(table_rows)
-    return df
+##    df = pd.DataFrame(table_rows)
+##    return df
 def animemap():
         # create a map with Folium
         m = folium.Map(location=[37.7749, -122.4194], zoom_start=13)
