@@ -253,8 +253,8 @@ def get_tide_data():
     }
 def waterloggingmap():
             # Read the digital elevation  model in longitude, latitude and elevation format.
-            ##DEM = pd.read_csv('boundary.csv', header = None, names = ['longitude','latitude','elevation'])# Set all negative elevations to zero to show that they will be under the mean sea level of zero
-            DEM=mysqlconnectn()
+            DEM = pd.read_csv('boundary.csv', header = None, names = ['longitude','latitude','elevation'])# Set all negative elevations to zero to show that they will be under the mean sea level of zero
+            ##DEM=mysqlconnectn()
             DEM.columns = ['longitude','latitude','elevation']
             DEM.drop(DEM.head(1).index, inplace=True)# delete the first row that contain labels 'x,y,z'
             DEM = DEM.replace(',','.', regex=True).astype(float) # set data type to float, they were saved as strings
