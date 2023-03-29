@@ -23,6 +23,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 ##import mysql.connector as sql
 from folium.plugins import TimestampedGeoJson
+import pandas as pd
+import folium
+import datetime
+import folium.plugins as plugins
+import datetime
+
 
 
 @login_required(login_url="/login/")
@@ -30,7 +36,7 @@ def index(request):
     response=get_station_data(42809)
     tide=get_tide_data()
     m2=waterloggingmap()
-    m=animemap()
+    m=animemap2()
     context = {'segment': 'index','tmax':(((json.dumps((response['forecast'][0]['max']), indent = 4)))),
                'tmin':(((json.dumps((response['forecast'][0]['min']), indent = 4)))),
                'forecast':(((json.dumps((response['forecast'][0]['condition']), indent = 4)))),
@@ -375,4 +381,85 @@ def animemap():
         # render the map
         
         return tm
+
+def animemap2():
+    # Import DEM CSV data
+    dem_data = pd.read_csv('boundary.csv')
+    rainfall =[100,50,30]
+    vmin = dem_data['elevation'].min()
+    vmean= dem_data['elevation'].mean()
+    vmax = dem_data['elevation'].max()# Setup colormap
+    colors = ['blue','royalblue', 'navy','pink',  'mediumpurple',  'darkorchid',  'plum',  'm', 'mediumvioletred', 'palevioletred', 'crimson',
+             'magenta','pink','red','yellow','orange', 'brown','green', 'darkgreen']
+    print(vmean)
+
+    for i in range(0,len(dem_data)):
+        for rain in rainfall:
+            dem_data.loc[i,'rainfall']=int(dem_data.loc[i,'elevation'])+rain
+            dem_data['timestamp']=datetime.datetime.now()+datetime.timedelta(minutes = i)
+            
+
+    # Create map
+    m = folium.Map([dem_data.latitude.mean(), dem_data.longitude.mean()], zoom_start=12, tiles="OpenStreetMap")
+
+    # Add tile layer
+    folium.TileLayer('OpenStreetMap').add_to(m)
+    # Create HeatMap layer
+    heat_data = dem_data[['latitude', 'longitude', 'elevation']].values.tolist()
+    folium.plugins.HeatMap(heat_data, radius=2).add_to(m)
+    # Set threshold elevation value
+    threshold = vmean
+
+
+
+    # Filter data to show areas below threshold elevation value
+    waterlogged_data = dem_data[dem_data['elevation'] < threshold][['latitude', 'longitude', 'elevation']].values.tolist()
+
+    print(waterlogged_data)
+
+
+    # Add Waterlogged areas layer
+    folium.FeatureGroup(name='Waterlogged areas').add_to(m)
+    folium.plugins.HeatMap(waterlogged_data, radius=2).add_to(m)
+
+
+    # Define start and end timestamps
+    start_date = datetime.datetime.now()
+    end_date = datetime.datetime.now()+datetime.timedelta(minutes = i)
+
+
+    print(dem_data)
+    # Generate GeoJson data for each timestamp
+    data = []
+    ##m = folium.Map([dem_data.latitude.mean(), dem_data.longitude.mean()], zoom_start=12, tiles="OpenStreetMap")
+    for timestamp in pd.date_range(start_date, end_date, freq='M'):
+        print(timestamp)
+        # Filter data to show areas below threshold elevation value for current timestamp
+        filtered_data = dem_data[(dem_data['elevation'] < threshold) & (dem_data['timestamp'] == timestamp)][['latitude', 'longitude', 'elevation']].values.tolist()
+
+        # Create GeoJson data
+        geojson_data = {
+            'type': 'FeatureCollection',
+            'features': [{'type': 'Feature',
+                          'geometry': {'type': 'Point', 'coordinates': [d[1], d[0]]},
+                          'properties': {'elevation': d[2]}}
+                         for d in filtered_data]
+        }
+
+        # Add GeoJson data with timestamp
+        data.append({
+            'time': timestamp.strftime('%Y-%m-%d %H:%M:%S:f'),
+            'data': geojson_data
+        })
+
+    # Add TimestampedGeoJson layer
+    folium.plugins.TimestampedGeoJson({'type': 'FeatureCollection', 'features': []}, period='P1M', add_last_point=True, auto_play=False, loop=False, max_speed=0.5, loop_button=True, date_options='YYYY-MM-DD', time_slider_drag_update=True).add_to(m)
+
+    # Add data to TimestampedGeoJson layer
+    folium.LayerControl().add_to(m)
+    # add the TimestampedGeoJson layer to the map
+    ##timestamped_geojson.add_to(m)
+    tm=m._repr_html_()
+
+    return tm
 
