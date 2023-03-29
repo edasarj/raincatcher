@@ -16,3 +16,5 @@ folium==0.14.0
 scipy==1.9.3
 geojsoncontour==0.4.0
 matplotlib==3.6.1
+pandas==1.5.0
+
