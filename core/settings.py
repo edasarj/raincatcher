@@ -27,8 +27,8 @@ DEBUG = env('DEBUG')
 ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
 
 # load production server from .env
-ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1','raincatcher.azurewebsites.net','http://raincatcher.azurewebsites.net','https://raincatcher.azurewebsites.net',               env('SERVER', default='127.0.0.1') ]
-CSRF_TRUSTED_ORIGINS = ['http://raincatcher.azurewebsites.net','https://raincatcher.azurewebsites.net','http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
+ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1','waterlogger.azurewebsites.net','http://waterlogger.azurewebsites.net','https://raincatcher.azurewebsites.net',               env('SERVER', default='127.0.0.1') ]
+CSRF_TRUSTED_ORIGINS = ['http://waterlogger.azurewebsites.net','https://waterlogger.azurewebsites.net','http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
 
 # Application definition
 

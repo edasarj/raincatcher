@@ -415,7 +415,6 @@ def animemap2():
     # Filter data to show areas below threshold elevation value
     waterlogged_data = dem_data[dem_data['elevation'] < threshold][['latitude', 'longitude', 'elevation']].values.tolist()
 
-    print(waterlogged_data)
 
 
     # Add Waterlogged areas layer
@@ -428,7 +427,6 @@ def animemap2():
     end_date = datetime.datetime.now()+datetime.timedelta(minutes = i)
 
 
-    print(dem_data)
     # Generate GeoJson data for each timestamp
     data = []
     ##m = folium.Map([dem_data.latitude.mean(), dem_data.longitude.mean()], zoom_start=12, tiles="OpenStreetMap")
@@ -448,17 +446,34 @@ def animemap2():
 
         # Add GeoJson data with timestamp
         data.append({
-            'time': timestamp.strftime('%Y-%m-%d %H:%M:%S:f'),
+            'times': timestamp.strftime('%Y-%m-%d %H:%M:%S:f'),
             'data': geojson_data
         })
 
     # Add TimestampedGeoJson layer
-    folium.plugins.TimestampedGeoJson({'type': 'FeatureCollection', 'features': []}, period='P1M', add_last_point=True, auto_play=False, loop=False, max_speed=0.5, loop_button=True, date_options='YYYY-MM-DD', time_slider_drag_update=True).add_to(m)
+##    folium.plugins.TimestampedGeoJson({'type': 'FeatureCollection', 'features': []}, period='P1M',
+##                                      add_last_point=True, auto_play=False, loop=False, max_speed=0.5,
+##                                      loop_button=True, date_options='YYYY-MM-DD', time_slider_drag_update=True).add_to(m)
+##
+##    # Add data to TimestampedGeoJson layer
+##    folium.LayerControl().add_to(m)
+##    # add the TimestampedGeoJson layer to the map
+##    ##timestamped_geojson.add_to(m)
+##    tm=m._repr_html_()
+    timestamped_geojson = TimestampedGeoJson(
+        data=data,
+        period='PT1H',
+        duration='PT1H',
+        auto_play=True,
+        loop=True,
+        max_speed=1,
+        loop_button=True,
+        date_options='YYYY-MM-DDTHH:MM:SSZ',
+        time_slider_drag_update=True,
+    )
 
-    # Add data to TimestampedGeoJson layer
-    folium.LayerControl().add_to(m)
     # add the TimestampedGeoJson layer to the map
-    ##timestamped_geojson.add_to(m)
+    timestamped_geojson.add_to(m)
     tm=m._repr_html_()
 
     return tm
