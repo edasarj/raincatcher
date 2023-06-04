@@ -1,0 +1,172 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Page Blank {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+	<style>
+#mySidenav a {
+  position: absolute;
+  left: -80px;
+  transition: 0.3s;
+  padding: 15px;
+  width: 100px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+}
+
+#mySidenav a:hover {
+  left: 0;
+}
+#logo {
+  top: 80px;
+  background-color: #ac7c54;
+  opacity: 0.2;
+}
+#about {
+  top: 20px;
+  background-color: #0c74bc;
+  opacity: 0.2;
+}
+
+#blog {
+  top: 80px;
+  background-color: #ac7c54;
+  opacity: 0.2;
+}
+
+
+#projects {
+  top: 140px;
+  background-color: #046c3c;
+  opacity: 0.2;
+}
+
+#contact {
+  top: 200px;
+  background-color: #88748c;
+  opacity: 0.2;
+}
+  
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Plot Map</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Plot Map</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Plot Map</h5>
+                                        </div>
+                                        <div class="card-block" id="map"style="width: 75vw; height: 100vh">
+                                            <!--div id="map" style="width: 50vw; height: 50vh"></div-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://unpkg.com/deck.gl@^8.5.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.5.0/dist.min.js"></script>
+
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+<script type="text/javascript">
+   // Define an array of locations (latitude and longitude)
+var locations = [
+  [22.55691632037359, 88.50520542831444],// Example location 1
+  [22.556818429776275, 88.50515199972583],// Example location 2
+  [22.556748311146098, 88.50573990064103],// Example location 3
+  [22.5565997694634, 88.50626694147817],// Example location 4
+  [22.55737420162785, 88.50659033087324],// Example location 5
+ [22.557910720967932, 88.50677827187972],// Example location 6
+[22.558429736121727, 88.50697128099772],// Example location 7
+[22.558538723635262, 88.50700346750577],// Example location 8
+[22.55876031529175, 88.50591821604392],// Example location 9
+[22.55884952173707, 88.50598268191594],// Example location 10
+[22.559017465710422, 88.50813734955419],// Example location 11
+[22.5593320417359, 88.50869524903013],// Example location 12
+[22.559696156391837, 88.50886422819754],// Example location 13
+[22.560212068146914, 88.50732783579912],// Example location 14
+[22.559817020111918, 88.50708379904388],// Example location 15
+[22.55918742018924, 88.50683136073854],// Example location 16
+[22.556613393088035, 88.50647078936267],// Example location 17
+
+[22.559667900284975, 88.50905356373973],// Example location 18
+[22.559073673690367, 88.50853975021779],// Example location 19
+//[22.556613393088035, 88.50647078936267],// Example location 20
+
+ 
+  
+];
+
+// Create the map centered on a specific location
+var map = L.map('map').setView([22.55691632037359, 88.50520542831444], 13);
+
+// Add the OpenStreetMap tile layer to the map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+// Iterate over the locations array and add markers to the map
+for (var i = 0; i < locations.length; i++) {
+  var marker = L.marker(locations[i]).addTo(map);
+
+  // Add a click event listener to each marker
+  marker.on('click', function(e) {
+    // Generate a random number between 1 and 100
+    var randomNum = Math.floor(Math.random() * 3.5) + 0;
+	var randomLev = Math.floor(Math.random() * 2) + 1;
+    // Display the random number in an alert
+    alert('Velocity: ' + randomNum +' Level: ' + randomLev);
+  });
+}
+
+  </script>
+
+
+
+{% endblock javascripts %}
