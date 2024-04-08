@@ -95,7 +95,7 @@ def pages(request):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 def get_station_data(id):
-    URL = 'http://city.imd.gov.in/citywx/city_weather.php?id={}'.format(id)
+    URL = 'https://city.imd.gov.in/citywx/city_weather.php?id={}'.format(id)
 
     response = requests.get(URL, verify=False)
     html_text = response.text
